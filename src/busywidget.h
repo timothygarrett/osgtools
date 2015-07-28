@@ -11,15 +11,14 @@
 #include <string>
 
 // Local
+#include "osgtools.h"
 #include "widget.h"
 
 namespace osgtools {
 	
-	class BusyWidget : public Widget {
+	class OSGTOOLS BusyWidget : public Widget {
 		
 		std::string _sImgPath;					/*!< Path for the busy cursor image */
-
-
 		
 	public:
 		BusyWidget() {}

@@ -7,18 +7,19 @@
 */
 #pragma once
 
-// Local
-#include "widget.h"
 
 // OSG
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/ref_ptr>
+#include <osg/Switch>
 
+// Local
+#include "osgtools.h"
 
 namespace osgtools {
 	
-	class CurtainWidget : public Widget
+	class OSGTOOLS CurtainWidget : public Widget
 	{
 	protected:
 		int _left;

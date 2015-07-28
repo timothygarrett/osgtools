@@ -19,9 +19,12 @@
 #include <osg/ref_ptr>
 #include <osgText/Text>
 
+// Local
+#include "osgtools.h"
+
 namespace osgtools {
 
-	class Plot : public osg::Camera {
+	class OSGTOOLS Plot : public osg::Camera {
 
 	protected:
 

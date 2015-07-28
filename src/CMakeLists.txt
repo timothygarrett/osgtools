@@ -37,6 +37,10 @@ set(OSG_LIBS
 	optimized ${OSGTEXT_LIBRARY}
 )
 
+set(MAIN_SRC
+	osgtools.h
+)
+
 set(UI_SRC
 	histogram.h
 	histogram.cpp
@@ -51,10 +55,12 @@ set(UI_SRC
 )
 
 # Create source groups
+source_group(main FILES ${MAIN_SRC})
 source_group(gui FILES ${UI_SRC})
 
 # Add the source to the exe
 add_library( osgtools SHARED
+	${MAIN_SRC}
 	${UI_SRC}
 )
 

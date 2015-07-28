@@ -16,11 +16,12 @@
 #include <vector>
 
 // Local
+#include "osgtools.h"
 #include "plot.h"
 
 namespace osgtools {
 	
-	class Histogram : public Plot {
+	class OSGTOOLS Histogram : public Plot {
 	protected:
 		std::vector<float> _bins;
 		std::vector<float> xValues;
