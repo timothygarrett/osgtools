@@ -4,7 +4,7 @@
 #	Tim Garrett (garrettt@iastate.edu)
 #	2015.07.22
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.2)
 
 # Main project
 project( osgtools )
