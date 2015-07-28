@@ -16,6 +16,8 @@
 
 // Local
 #include "osgtools.h"
+#include "widget.h"
+#include "histogram.h"
 
 namespace osgtools {
 	
@@ -24,6 +26,10 @@ namespace osgtools {
 	protected:
 		int _left;
 		int _right;
+
+		// Active range
+		int _activeLeft;
+		int _activeRight;
 		
 		// Offset
 		int _startX;
@@ -31,6 +37,9 @@ namespace osgtools {
 		int _endX;
 		int _endY;
 
+		// Curtain switches and geodes
+		osg::ref_ptr<osg::Switch> _leftCurtainSwitch;
+		osg::ref_ptr<osg::Switch> _rightCurtainSwitch;
 		osg::ref_ptr<osg::Geode> _leftCurtain;
 		osg::ref_ptr<osg::Geode> _rightCurtain;
 
@@ -43,6 +52,9 @@ namespace osgtools {
 		CurtainWidget();
 		CurtainWidget( int width, int height );
 		
+		void reset();
+		void setHistogramActiveRange( osgtools::Histogram* pHistogram );
+		void setActiveRange( int left, int right );
 		void setOffset( int startX, int startY, int endX, int endY );
 		void setEndPoints( int left, int right );
 		void update();

@@ -14,25 +14,38 @@ osgtools::CurtainWidget::CurtainWidget() :
 	_startX(0),
 	_startY(0),
 	_endX(0),
-	_endY(0)
+	_endY(0),
+	_activeLeft(-1),
+	_activeRight(-1)
 {}
 
 osgtools::CurtainWidget::CurtainWidget( int width, int height ) :
 	Widget( width, height, 0, 0, width, height ),
-	_left(-1),
-	_right(-1),
+	_left(0),
+	_right(width),
 	_startX(0),
 	_startY(0),
 	_endX(width),
-	_endY(height)
+	_endY(height),
+	_activeLeft(0),
+	_activeRight(width)
 {
+	// Create the switches
+	_leftCurtainSwitch = new osg::Switch();
+	_rightCurtainSwitch = new osg::Switch();
+
 	// Create the geodes
 	_leftCurtain = new osg::Geode();
 	_rightCurtain = new osg::Geode();
 	_leftCurtain->getOrCreateStateSet()->setMode( GL_BLEND, osg::StateAttribute::ON );
 	_rightCurtain->getOrCreateStateSet()->setMode( GL_BLEND, osg::StateAttribute::ON );
-	addChild( _leftCurtain.get() );
-	addChild( _rightCurtain.get() );
+
+	_leftCurtainSwitch->addChild( _leftCurtain.get() );
+	_rightCurtainSwitch->addChild( _rightCurtain.get() );
+	addChild( _leftCurtainSwitch.get() );
+	addChild( _rightCurtainSwitch.get() );
+
+	update();
 }
 
 osg::Geometry* osgtools::CurtainWidget::createCurtain( int x, int y, int width, int height )
@@ -62,7 +75,7 @@ void osgtools::CurtainWidget::setEndPoints( int left, int right )
 	_left = (left < 0 ? 0 : left);
 	_right = (right > _width ? _width : right);
 	
-	// Update the modes
+	// Update the nodes
 	update();
 }
 
@@ -87,6 +100,16 @@ void osgtools::CurtainWidget::update()
 	// Add new curtains
 	_leftCurtain->addDrawable( createCurtain(_startX, _startY, _left, _height) );
 	_rightCurtain->addDrawable( createCurtain(_startX + _right, _startY, _width - _right, _height) );
+
+	// Turn off
+	if (_left <= _activeLeft)
+		_leftCurtainSwitch->setAllChildrenOff();
+	else
+		_leftCurtainSwitch->setAllChildrenOn();
+	if (_right >= _activeRight)
+		_rightCurtainSwitch->setAllChildrenOff();
+	else
+		_rightCurtainSwitch->setAllChildrenOn();
 }
 
 void osgtools::CurtainWidget::setOffset(int startX, int startY, int endX, int endY)
@@ -99,4 +122,30 @@ void osgtools::CurtainWidget::setOffset(int startX, int startY, int endX, int en
 	_height = (_height <= _endY - _startY ? _height : _endY - _startY);
 	update();
 
+}
+
+void osgtools::CurtainWidget::setActiveRange( int left, int right )
+{
+	_activeLeft = left;
+	_activeRight = right;
+}
+
+void osgtools::CurtainWidget::setHistogramActiveRange( osgtools::Histogram* pHistogram )
+{
+	if (!pHistogram)
+		return;
+
+	// Get the dimensions
+	int xMin, yMin, width, height;
+	float xN, yN, xP, yP;
+	pHistogram->getPlotDimensions(xMin, yMin, width, height);
+	pHistogram->getRange(xN, yN, xP, yP);
+
+	// Set the range
+	setActiveRange(pHistogram->getXValuePixel(xN + 1) - xMin, pHistogram->getXValuePixel(xP) - xMin);
+}
+
+void osgtools::CurtainWidget::reset()
+{
+	setEndPoints(0, _width);
 }
